@@ -191,6 +191,21 @@ func (h *SettingWSHandler) SettingSync(c *pkgapp.WebsocketClient, msg *pkgapp.We
 		return
 	}
 
+	// Debug log: check if .agents files are in list
+	var agentsCount int
+	for _, s := range list {
+		if strings.HasPrefix(s.Path, ".agents/") {
+			agentsCount++
+		}
+	}
+	if agentsCount > 0 {
+		h.App.Logger().Debug("SettingSync: .agents files in list",
+			zap.String(logger.FieldTraceID, c.TraceID),
+			zap.Int64(logger.FieldUID, c.User.UID),
+			zap.Int("agentsCount", agentsCount),
+			zap.Int("totalList", len(list)))
+	}
+
 	cSettings := make(map[string]dto.SettingSyncCheckRequest)
 	cSettingsKeys := make(map[string]struct{})
 	for _, s := range params.Settings {
