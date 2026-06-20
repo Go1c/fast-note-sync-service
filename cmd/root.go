@@ -13,10 +13,6 @@ var configDefault string
 var rootCmd = &cobra.Command{
 	Use:   "fast-note-sync-service",
 	Short: "Fast Note Sync Service",
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.HelpTemplate()
-		cmd.Help()
-	},
 }
 
 // Execute executes the root command
@@ -24,6 +20,9 @@ var rootCmd = &cobra.Command{
 func Execute(efs embed.FS, c string) {
 	frontendFiles = efs
 	configDefault = c
+	if len(os.Args) == 1 {
+		os.Args = append(os.Args, "run")
+	}
 	if err := rootCmd.Execute(); err != nil {
 		BootstrapLogger().Error("command execution failed", zap.Error(err))
 		os.Exit(1)
