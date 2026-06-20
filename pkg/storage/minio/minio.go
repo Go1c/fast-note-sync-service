@@ -35,6 +35,9 @@ var clients = make(map[string]*MinIO)
 func NewClient(conf *Config) (*MinIO, error) {
 	var endpoint = conf.Endpoint
 	var region = conf.Region
+	if region == "" {
+		region = "us-east-1"
+	}
 	var accessKeyId = conf.AccessKeyID
 	var accessKeySecret = conf.AccessKeySecret
 
